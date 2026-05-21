@@ -1,12 +1,12 @@
 /* ==========================================================================
-   INSTITUTIONAL CYBER TRADING SWATCHES
+   INSTITUTIONAL QUANT TERMINAL COLORS
    ========================================================================== */
 :root {
     --bg-dark: #07090e;
     --bg-panel: #0d111b;
     --border-glow: #161f30;
     
-    /* Neon Accents matching your image sample */
+    /* Neon Palettes Matching Reference App Image Exactly */
     --neon-green: #00ff87;
     --neon-cyan: #00f2fe;
     --neon-yellow: #ffb300;
@@ -16,6 +16,9 @@
     --text-dim: #737c8c;
 }
 
+/* ==========================================================================
+   GLOBAL STRUCTURE RESET
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -25,7 +28,7 @@
 
 body {
     background-color: var(--bg-dark);
-    /* High-end Subtle Grid Blueprint Background */
+    /* Neon Matrix Geometry Blueprint Grid */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
@@ -43,10 +46,10 @@ body {
 }
 
 /* ==========================================================================
-   SIDEBAR STYLING
+   SIDEBAR & BUTTON OVERHAUL
    ========================================================================== */
 .sidebar {
-    width: 260px;
+    width: 280px;
     background-color: #090c12;
     border-right: 1px solid var(--border-glow);
     display: flex;
@@ -88,10 +91,11 @@ body {
 .nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
-.nav-item {
+/* Force links/buttons inside sidebar to inherit theme layout styles */
+.nav-menu button, .nav-item {
     width: 100%;
     padding: 12px 16px;
     color: var(--text-dim);
@@ -105,18 +109,19 @@ body {
     transition: all 0.2s ease;
 }
 
-.nav-item:hover {
+.nav-menu button:hover {
     color: var(--text-bright);
     background: rgba(255, 255, 255, 0.02);
 }
 
-.nav-item.active {
+.nav-menu button.active {
     color: var(--neon-green);
     background: rgba(0, 255, 135, 0.06);
+    box-shadow: inset 2px 0 0 var(--neon-green);
 }
 
 /* ==========================================================================
-   WORKSPACE & WORKSPACE ACTION HEADERS
+   MAIN DASHBOARD CONTROLS
    ========================================================================== */
 .main-content {
     flex: 1;
@@ -181,7 +186,7 @@ body {
 }
 
 /* ==========================================================================
-   SEGMENTED CARD BLOCKS
+   SEGMENTED MATRIX CARDS
    ========================================================================== */
 .metrics-grid {
     display: grid;
@@ -194,10 +199,11 @@ body {
     background: var(--bg-panel);
     border: 1px solid var(--border-glow);
     border-radius: 8px;
-    padding: 20px;
+    padding: 24px;
     position: relative;
 }
 
+/* Color Coding Top-Highlight Borders from image */
 .metric-card::before {
     content: '';
     position: absolute;
@@ -205,10 +211,11 @@ body {
     height: 2px;
     border-radius: 8px 8px 0 0;
 }
-.metric-card.scanned::before { background: var(--neon-cyan); }
-.metric-card.buy::before { background: var(--neon-green); }
-.metric-card.hold::before { background: var(--neon-yellow); }
-.metric-card.avoid::before { background: var(--neon-red); }
+
+.metric-card:nth-child(1)::before { background: var(--neon-cyan); }
+.metric-card:nth-child(2)::before { background: var(--neon-green); }
+.metric-card:nth-child(3)::before { background: var(--neon-yellow); }
+.metric-card:nth-child(4)::before { background: var(--neon-red); }
 
 .metric-card h3 {
     font-size: 0.7rem;
@@ -225,13 +232,20 @@ body {
 }
 
 /* ==========================================================================
-   TABLE SEGMENTS & RESEARCH CONTROLS
+   DYNAMIC TABLES & RESEARCH ROW ACCENTS
    ========================================================================== */
 .table-wrapper {
     background: var(--bg-panel);
     border: 1px solid var(--border-glow);
     border-radius: 8px;
     padding: 24px;
+    margin-top: 20px;
+}
+
+.table-wrapper h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .table-controls {
@@ -254,13 +268,15 @@ body {
 
 .search-input:focus { border-color: var(--neon-cyan); }
 
-.data-table {
+/* Global Fallback enforcement for any dynamic tabular content updates */
+table, .data-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
-.data-table th {
-    padding: 12px 16px;
+th {
+    padding: 14px 16px;
     color: var(--text-dim);
     font-size: 0.75rem;
     font-weight: 700;
@@ -269,15 +285,16 @@ body {
     text-align: left;
 }
 
-.data-table td {
-    padding: 14px 16px;
+td {
+    padding: 16px 16px;
     border-bottom: 1px solid #141a29;
     font-size: 0.9rem;
+    color: #e2e8f0;
 }
 
-.data-table tr:hover td { background: #111724; }
+tr:hover td { background: #111724; }
 
-/* Badges & Trading Shortcuts */
+/* Custom Action Pills and Shortcuts */
 .confluence-badge {
     background: rgba(0, 255, 135, 0.08);
     color: var(--neon-green);
@@ -293,20 +310,22 @@ body {
     gap: 6px;
 }
 
-.btn-link-action {
+/* Force target links generated inside table row to style as terminal buttons */
+a, .btn-link-action {
     padding: 4px 10px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #60a5fa;
+    color: #60a5fa !important;
     text-decoration: none;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
+    transition: all 0.2s ease;
 }
 
-.btn-link-action:hover {
+a:hover, .btn-link-action:hover {
     background: rgba(59, 130, 246, 0.15);
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .pagination-container {
