@@ -3,36 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMAScreener Pro Terminal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>AlphaQuant Terminal Screener</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#07090e',
+                        'cyber-panel': '#0d111b',
+                        'cyber-border': '#161f30',
+                        'neon-green': '#00ff87',
+                        'neon-cyan': '#00f2fe',
+                        'neon-yellow': '#ffb300',
+                        'neon-red': '#ff3366',
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 1.5s infinite',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.2' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #07090e;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .glass-effect {
+            background: rgba(13, 17, 27, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(22, 31, 48, 0.5);
+        }
+        .glow-green {
+            box-shadow: 0 0 20px rgba(0, 255, 135, 0.3);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="brand">
-                <h2><span class="neon-dot"></span> DMAScreener</h2>
-                <p>Live Scanning Matrix</p>
+<body class="bg-cyber-dark text-white font-sans overflow-hidden">
+    <div class="flex h-screen w-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-black bg-opacity-40 border-r border-cyber-border flex flex-col overflow-y-auto scrollbar-hide">
+            <!-- Brand -->
+            <div class="p-6 border-b border-cyber-border">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-3 h-3 bg-neon-green rounded-full glow-green"></div>
+                    <h1 class="text-2xl font-black tracking-tight">DMAScreener</h1>
+                </div>
+                <p class="text-xs font-bold tracking-widest text-gray-500 uppercase">Live Scanning Matrix</p>
             </div>
-            <nav class="nav-menu" id="navMenu">
-                </nav>
+
+            <!-- Navigation Menu -->
+            <nav class="flex-1 p-4 space-y-1" id="navMenu">
+                <!-- Generated dynamically -->
+            </nav>
+
+            <!-- Footer Info -->
+            <div class="p-4 border-t border-cyber-border text-xs text-gray-500">
+                <p class="mb-2">🔗 Connected Data Sources</p>
+                <p class="text-gray-600">Google Sheets • ChartIQ</p>
+            </div>
         </aside>
 
-        <main class="main-content">
-            <header class="content-header">
-                <div class="header-main-row">
-                    <h1 id="currentPageTitle">Executive Dashboard</h1>
-                    <div class="header-actions">
-                        <span class="status-indicator"><span class="pulse-dot"></span> Live Analysis</span>
-                        <button class="btn-refresh" onclick="window.location.reload();">Refresh Data</button>
-                    </div>
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="border-b border-cyber-border glass-effect px-8 py-6 flex items-center justify-between">
+                <div>
+                    <h2 id="currentPageTitle" class="text-3xl font-bold mb-2">Executive Dashboard</h2>
+                    <p id="currentPageDesc" class="text-xs font-bold tracking-widest text-gray-500 uppercase">Strategy Framework Interface</p>
                 </div>
-                <p id="currentPageDesc" class="strategy-sub">Strategy Framework Interface</p>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-neon-green bg-opacity-10 border border-neon-green border-opacity-20">
+                        <div class="w-2 h-2 bg-neon-green rounded-full animate-pulse-glow"></div>
+                        <span class="text-xs font-bold tracking-widest uppercase text-neon-green">Live Analysis</span>
+                    </div>
+                    <button onclick="window.location.reload();" class="px-4 py-2 bg-neon-green text-black font-bold rounded-lg text-sm uppercase tracking-wider hover:bg-opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        ⟳ Refresh
+                    </button>
+                </div>
             </header>
 
-            <section class="view-panel" id="viewPanel">
-                </section>
+            <!-- Content Panel -->
+            <section id="viewPanel" class="flex-1 overflow-y-auto scrollbar-hide p-8">
+                <!-- Generated dynamically -->
+            </section>
         </main>
     </div>
+
     <script src="data.js"></script>
     <script src="app.js"></script>
 </body>
