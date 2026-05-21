@@ -10,13 +10,9 @@
             theme: {
                 extend: {
                     colors: {
-                        'cyber-dark': '#07090e',
-                        'cyber-panel': '#0d111b',
-                        'cyber-border': '#161f30',
-                        'neon-green': '#00ff87',
-                        'neon-cyan': '#00f2fe',
-                        'neon-yellow': '#ffb300',
-                        'neon-red': '#ff3366',
+                        'brand-blue': '#1e40af',
+                        'brand-light': '#f0f9ff',
+                        'brand-dark': '#0f172a',
                     },
                     animation: {
                         'pulse-glow': 'pulse-glow 1.5s infinite',
@@ -24,83 +20,60 @@
                     keyframes: {
                         'pulse-glow': {
                             '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '0.2' },
+                            '50%': { opacity: '0.6' },
                         }
                     }
                 }
             }
         }
     </script>
-    <style>
-        body {
-            background-color: #07090e;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-        .glass-effect {
-            background: rgba(13, 17, 27, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(22, 31, 48, 0.5);
-        }
-        .glow-green {
-            box-shadow: 0 0 20px rgba(0, 255, 135, 0.3);
-        }
-        .glow-cyan {
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
 </head>
-<body class="bg-cyber-dark text-white font-sans overflow-hidden">
-    <div class="flex h-screen w-screen">
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="flex h-screen w-screen bg-white">
         <!-- Sidebar -->
-        <aside class="w-72 bg-black bg-opacity-40 border-r border-cyber-border flex flex-col overflow-y-auto scrollbar-hide">
+        <aside class="w-72 bg-gradient-to-b from-blue-600 to-blue-700 text-white flex flex-col shadow-lg overflow-y-auto">
             <!-- Brand -->
-            <div class="p-6 border-b border-cyber-border">
+            <div class="p-6 border-b border-blue-500">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="w-3 h-3 bg-neon-green rounded-full glow-green"></div>
+                    <div class="w-4 h-4 bg-yellow-400 rounded-full animate-pulse-glow shadow-lg shadow-yellow-400"></div>
                     <h1 class="text-2xl font-black tracking-tight">DMAScreener</h1>
                 </div>
-                <p class="text-xs font-bold tracking-widest text-gray-500 uppercase">Live Scanning Matrix</p>
+                <p class="text-xs font-bold tracking-widest text-blue-100 uppercase">Live Scanning Matrix</p>
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="flex-1 p-4 space-y-1" id="navMenu">
+            <nav class="flex-1 p-4 space-y-2" id="navMenu">
                 <!-- Generated dynamically -->
             </nav>
 
             <!-- Footer Info -->
-            <div class="p-4 border-t border-cyber-border text-xs text-gray-500">
+            <div class="p-4 border-t border-blue-500 text-xs text-blue-100">
                 <p class="mb-2">🔗 Connected Data Sources</p>
-                <p class="text-gray-600">Google Sheets • ChartIQ</p>
+                <p class="text-blue-200 text-xs">Google Sheets • ChartIQ</p>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 flex flex-col overflow-hidden bg-gray-50">
             <!-- Header -->
-            <header class="border-b border-cyber-border glass-effect px-8 py-6 flex items-center justify-between">
+            <header class="border-b border-gray-200 bg-white px-8 py-6 flex items-center justify-between shadow-sm">
                 <div>
-                    <h2 id="currentPageTitle" class="text-3xl font-bold mb-2">Executive Dashboard</h2>
+                    <h2 id="currentPageTitle" class="text-3xl font-bold text-gray-900 mb-2">Executive Dashboard</h2>
                     <p id="currentPageDesc" class="text-xs font-bold tracking-widest text-gray-500 uppercase">Strategy Framework Interface</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-neon-green bg-opacity-10 border border-neon-green border-opacity-20">
-                        <div class="w-2 h-2 bg-neon-green rounded-full animate-pulse-glow"></div>
-                        <span class="text-xs font-bold tracking-widest uppercase text-neon-green">Live Analysis</span>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 border border-green-300">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse-glow"></div>
+                        <span class="text-xs font-bold tracking-widest uppercase text-green-700">Live Analysis</span>
                     </div>
-                    <button onclick="window.location.reload();" class="px-4 py-2 bg-neon-green text-black font-bold rounded-lg text-sm uppercase tracking-wider hover:bg-opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <button onclick="window.location.reload();" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg text-sm uppercase tracking-wider hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
                         ⟳ Refresh
                     </button>
                 </div>
             </header>
 
             <!-- Content Panel -->
-            <section id="viewPanel" class="flex-1 overflow-y-auto scrollbar-hide p-8">
+            <section id="viewPanel" class="flex-1 overflow-y-auto p-8">
                 <!-- Generated dynamically -->
             </section>
         </main>
