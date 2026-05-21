@@ -17,7 +17,12 @@ function renderSidebar() {
     
     Object.keys(SCREENERS_CONFIG).forEach(key => {
         const btn = document.createElement("button");
-        btn.className = `nav-item ${state.activeTab === key ? 'active' : ''}`;
+        const isActive = state.activeTab === key;
+        btn.className = `w-full text-left px-4 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+            isActive 
+                ? 'bg-neon-green bg-opacity-15 text-neon-green border border-neon-green border-opacity-30' 
+                : 'text-gray-400 hover:text-white hover:bg-white hover:bg-opacity-5'
+        }`;
         btn.innerText = SCREENERS_CONFIG[key].title;
         btn.onclick = () => switchPage(key);
         menu.appendChild(btn);
@@ -29,8 +34,13 @@ function switchPage(pageKey) {
     state.searchFilter = "";
     state.currentPage = 1;
     
-    document.querySelectorAll(".nav-item").forEach((btn, idx) => {
-        btn.classList.toggle("active", Object.keys(SCREENERS_CONFIG)[idx] === pageKey);
+    document.querySelectorAll("#navMenu button").forEach((btn) => {
+        const isActive = SCREENERS_CONFIG[pageKey] && btn.innerText === SCREENERS_CONFIG[pageKey].title;
+        btn.className = `w-full text-left px-4 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
+            isActive 
+                ? 'bg-neon-green bg-opacity-15 text-neon-green border border-neon-green border-opacity-30' 
+                : 'text-gray-400 hover:text-white hover:bg-white hover:bg-opacity-5'
+        }`;
     });
 
     document.getElementById("currentPageTitle").innerText = SCREENERS_CONFIG[pageKey].title;
@@ -54,14 +64,29 @@ function renderDashboard(target) {
     const countMa = ScreenerRepository.data["ma_1001"]?.length || 0;
     const countRs = ScreenerRepository.data["strong_rs"]?.length || 0;
 
-    // Segmented layout styling cards clone from your image
-    let cardsHtml = `
-        <div class="metrics-grid">
-            <div class="metric-card scanned"><h3>Scanned Assets</h3><div class="value">${countGSheet + countRsi + countMa}</div></div>
-            <div class="metric-card buy"><h3>Buy Signals</h3><div class="value">${countRsi}</div></div>
-            <div class="metric-card hold"><h3>Hold Zone</h3><div class="value">${countMa}</div></div>
-            <div class="metric-card avoid"><h3>Avoid Zone</h3><div class="value">${countRs}</div></div>
-        </div>`;
+    const cards = [
+        { label: 'Scanned Assets', value: countGSheet + countRsi + countMa, color: 'cyan' },
+        { label: 'Buy Signals', value: countRsi, color: 'green' },
+        { label: 'Hold Zone', value: countMa, color: 'yellow' },
+        { label: 'Avoid Zone', value: countRs, color: 'red' }
+    ];
+
+    const colorMap = {
+        cyan: 'border-t-2 border-neon-cyan',
+        green: 'border-t-2 border-neon-green',
+        yellow: 'border-t-2 border-neon-yellow',
+        red: 'border-t-2 border-neon-red'
+    };
+
+    let cardsHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">`;
+    cards.forEach(card => {
+        cardsHtml += `
+            <div class="glass-effect p-6 rounded-xl ${colorMap[card.color]} hover:shadow-lg hover:shadow-opacity-50 transition-all">
+                <h3 class="text-xs font-bold tracking-widest text-gray-400 uppercase mb-4">${card.label}</h3>
+                <div class="text-4xl font-black text-white">${card.value}</div>
+            </div>`;
+    });
+    cardsHtml += `</div>`;
 
     const matchesMap = {};
     Object.keys(ScreenerRepository.data).forEach(screenerKey => {
@@ -81,15 +106,15 @@ function renderDashboard(target) {
         const obj = matchesMap[ticker];
         if (obj.counts > 1) {
             confluenceRows += `
-                <tr>
-                    <td><span style="color:var(--neon-cyan); font-weight:700;">NSE:${ticker}</span></td>
-                    <td>${obj.name}</td>
-                    <td><span style="color: var(--neon-green); font-weight:bold;">+${(obj.counts * 0.85).toFixed(2)}%</span></td>
-                    <td><span class="confluence-badge">${obj.counts} Scan Matches</span></td>
-                    <td>
-                        <div class="research-links-container">
-                            <a href="https://in.tradingview.com/chart/?symbol=NSE:${ticker}" target="_blank" class="btn-link-action">TradingView</a>
-                            <a href="https://www.nseindia.com/get-quotes/equity?symbol=${ticker}" target="_blank" class="btn-link-action" style="color:var(--text-dim);">NSE</a>
+                <tr class="border-b border-cyber-border hover:bg-white hover:bg-opacity-5 transition-colors">
+                    <td class="px-6 py-4"><span class="text-neon-cyan font-bold">NSE:${ticker}</span></td>
+                    <td class="px-6 py-4 text-gray-300">${obj.name}</td>
+                    <td class="px-6 py-4"><span class="text-neon-green font-bold">+${(obj.counts * 0.85).toFixed(2)}%</span></td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 bg-neon-green bg-opacity-15 text-neon-green text-xs font-bold rounded-full">${obj.counts} Matches</span></td>
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <a href="https://in.tradingview.com/chart/?symbol=NSE:${ticker}" target="_blank" class="px-3 py-1 bg-white bg-opacity-5 hover:bg-opacity-10 text-blue-400 text-xs font-semibold rounded transition-all border border-white border-opacity-10">TradingView</a>
+                            <a href="https://www.nseindia.com/get-quotes/equity?symbol=${ticker}" target="_blank" class="px-3 py-1 bg-white bg-opacity-5 hover:bg-opacity-10 text-gray-400 text-xs font-semibold rounded transition-all border border-white border-opacity-10">NSE</a>
                         </div>
                     </td>
                 </tr>`;
@@ -97,16 +122,24 @@ function renderDashboard(target) {
     });
 
     const tableHtml = `
-        <div class="table-wrapper">
-            <h3 style="margin-bottom: 20px; font-weight:700; font-size:1rem;">🔥 Strategic Multi-Screener Confluence Watchlist</h3>
-            <table class="data-table">
-                <thead>
-                    <tr><th>Scrip Name</th><th>Company Detail</th><th>Day Change %</th><th>Signal Status</th><th>Research Links</th></tr>
-                </thead>
-                <tbody>
-                    ${confluenceRows || `<tr><td colspan="5" style="text-align:center; color: var(--text-dim);">No overlapping signals found across running criteria.</td></tr>`}
-                </tbody>
-            </table>
+        <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-6 text-white flex items-center gap-2">🔥 Strategic Multi-Screener Confluence</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-cyber-border">
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Scrip</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Company</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Change %</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Status</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Research</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${confluenceRows || `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No overlapping signals found</td></tr>`}
+                    </tbody>
+                </table>
+            </div>
         </div>`;
 
     target.innerHTML = cardsHtml + tableHtml;
@@ -131,47 +164,53 @@ function renderScreenerTable(target, screenerKey) {
     let rowsHtml = "";
     paginatedSlice.forEach(row => {
         const arrow = row.Change >= 0 ? '▲' : '▼';
-        const changeColor = row.Change >= 0 ? "color: var(--neon-green);" : "color: var(--neon-red);";
+        const changeClass = row.Change >= 0 ? 'text-neon-green' : 'text-neon-red';
         
         rowsHtml += `
-            <tr>
-                <td><span style="color:var(--neon-cyan); font-weight:700;">NSE:${row.Ticker}</span></td>
-                <td>${row.Name}</td>
-                <td>₹${row.Close.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
-                <td style="${changeColor} font-weight:600;">${arrow} ${row.Change >= 0 ? '+' : ''}${row.Change.toFixed(2)}%</td>
-                <td>
-                    <div class="research-links-container">
-                        <a href="https://in.tradingview.com/chart/?symbol=NSE:${row.Ticker}" target="_blank" class="btn-link-action">TradingView</a>
-                    </div>
+            <tr class="border-b border-cyber-border hover:bg-white hover:bg-opacity-5 transition-colors">
+                <td class="px-6 py-4"><span class="text-neon-cyan font-bold">NSE:${row.Ticker}</span></td>
+                <td class="px-6 py-4 text-gray-300">${row.Name}</td>
+                <td class="px-6 py-4 font-mono">₹${row.Close.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                <td class="px-6 py-4 font-bold ${changeClass}">${arrow} ${row.Change >= 0 ? '+' : ''}${row.Change.toFixed(2)}%</td>
+                <td class="px-6 py-4">
+                    <a href="https://in.tradingview.com/chart/?symbol=NSE:${row.Ticker}" target="_blank" class="px-3 py-1 bg-white bg-opacity-5 hover:bg-opacity-10 text-blue-400 text-xs font-semibold rounded transition-all border border-white border-opacity-10">View Chart</a>
                 </td>
             </tr>`;
     });
 
     target.innerHTML = `
-        <div class="table-wrapper">
-            <div class="table-controls">
-                <input type="text" class="search-input" id="tableSearch" placeholder="🔍 Filter by Symbol or Scrip Name..." value="${state.searchFilter}">
-                <div>
-                    <select id="rowsSelect" class="search-input" style="width:110px; padding:8px 12px;">
-                        <option value="5" ${state.rowsPerPage === 5 ? 'selected' : ''}>5 Rows</option>
-                        <option value="10" ${state.rowsPerPage === 10 ? 'selected' : ''}>10 Rows</option>
-                        <option value="20" ${state.rowsPerPage === 20 ? 'selected' : ''}>20 Rows</option>
-                    </select>
-                </div>
+        <div class="glass-effect rounded-xl p-6 space-y-4">
+            <div class="flex justify-between items-center gap-4">
+                <input type="text" id="tableSearch" placeholder="🔍 Search by Symbol or Company..." value="${state.searchFilter}" class="flex-1 px-4 py-2 bg-black bg-opacity-30 border border-cyber-border rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-neon-cyan transition-colors">
+                <select id="rowsSelect" class="px-4 py-2 bg-black bg-opacity-30 border border-cyber-border rounded-lg text-white text-sm focus:outline-none focus:border-neon-cyan transition-colors">
+                    <option value="5" ${state.rowsPerPage === 5 ? 'selected' : ''}>5 Rows</option>
+                    <option value="10" ${state.rowsPerPage === 10 ? 'selected' : ''}>10 Rows</option>
+                    <option value="20" ${state.rowsPerPage === 20 ? 'selected' : ''}>20 Rows</option>
+                </select>
             </div>
-            <table class="data-table">
-                <thead>
-                    <tr><th>Scrip</th><th>Company Name</th><th>CMP</th><th>Change %</th><th>Research</th></tr>
-                </thead>
-                <tbody>
-                    ${rowsHtml || `<tr><td colspan="5" style="text-align:center; color: var(--text-dim);">No active matching records found.</td></tr>`}
-                </tbody>
-            </table>
-            <div class="pagination-container">
-                <span style="font-size: 0.8rem; color: var(--text-dim);">Showing metrics ${totalRows === 0 ? 0 : startIdx + 1} to ${endIdx} of ${totalRows} entries</span>
-                <div>
-                    <button class="pagination-btn" id="prevBtn" ${state.currentPage === 1 ? 'disabled' : ''}>Previous</button>
-                    <button class="pagination-btn" id="nextBtn" ${state.currentPage === totalPages ? 'disabled' : ''} style="margin-left:6px;">Next</button>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-cyber-border">
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Scrip</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Company</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Price</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Change</th>
+                            <th class="text-left px-6 py-3 text-xs font-bold tracking-widest text-gray-500 uppercase">Research</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml || `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No matching records found</td></tr>`}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-cyber-border">
+                <span class="text-xs text-gray-500">Showing ${totalRows === 0 ? 0 : startIdx + 1} to ${endIdx} of ${totalRows} entries</span>
+                <div class="flex gap-2">
+                    <button id="prevBtn" ${state.currentPage === 1 ? 'disabled' : ''} class="px-4 py-2 bg-white bg-opacity-5 border border-cyber-border rounded-lg text-white text-sm font-semibold hover:bg-opacity-10 disabled:opacity-30 disabled:cursor-not-allowed transition-all">← Previous</button>
+                    <button id="nextBtn" ${state.currentPage === totalPages ? 'disabled' : ''} class="px-4 py-2 bg-white bg-opacity-5 border border-cyber-border rounded-lg text-white text-sm font-semibold hover:bg-opacity-10 disabled:opacity-30 disabled:cursor-not-allowed transition-all">Next →</button>
                 </div>
             </div>
         </div>`;
