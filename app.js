@@ -1,22 +1,73 @@
+let state = {
+    activeTab: "dashboard",
+    searchFilter: "",
+    rowsPerPage: 10,
+    currentPage: 1
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await ScreenerRepository.initAll();
+    renderSidebar();
+    switchPage("dashboard");
+});
+
+function renderSidebar() {
+    const menu = document.getElementById("navMenu");
+    menu.innerHTML = "";
+    
+    Object.keys(SCREENERS_CONFIG).forEach(key => {
+        const btn = document.createElement("button");
+        btn.className = `nav-item ${state.activeTab === key ? 'active' : ''}`;
+        btn.innerText = SCREENERS_CONFIG[key].title;
+        btn.onclick = () => switchPage(key);
+        menu.appendChild(btn);
+    });
+}
+
+function switchPage(pageKey) {
+    state.activeTab = pageKey;
+    state.searchFilter = "";
+    state.currentPage = 1;
+    
+    document.querySelectorAll(".nav-item").forEach((btn, idx) => {
+        btn.classList.toggle("active", Object.keys(SCREENERS_CONFIG)[idx] === pageKey);
+    });
+
+    document.getElementById("currentPageTitle").innerText = SCREENERS_CONFIG[pageKey].title;
+    renderMainView();
+}
+
+function renderMainView() {
+    const panel = document.getElementById("viewPanel");
+    panel.innerHTML = "";
+
+    if (state.activeTab === "dashboard") {
+        renderDashboard(panel);
+    } else {
+        renderScreenerTable(panel, state.activeTab);
+    }
+}
+
 function renderDashboard(target) {
-    // Generate the exact 4 metrics score cards from your template image layout
     const countGSheet = ScreenerRepository.data["volume_breakout"]?.length || 0;
     const countRsi = ScreenerRepository.data["rsi_90"]?.length || 0;
     const countMa = ScreenerRepository.data["ma_1001"]?.length || 0;
     const countRs = ScreenerRepository.data["strong_rs"]?.length || 0;
 
+    // Segmented layout styling cards clone from your image
     let cardsHtml = `
         <div class="metrics-grid">
-            <div class="metric-card scanned"><h3>Scanned Assets</h3><div class="value">${countGSheet + countRsi}</div></div>
+            <div class="metric-card scanned"><h3>Scanned Assets</h3><div class="value">${countGSheet + countRsi + countMa}</div></div>
             <div class="metric-card buy"><h3>Buy Signals</h3><div class="value">${countRsi}</div></div>
             <div class="metric-card hold"><h3>Hold Zone</h3><div class="value">${countMa}</div></div>
             <div class="metric-card avoid"><h3>Avoid Zone</h3><div class="value">${countRs}</div></div>
         </div>`;
 
-    // Process overlapping confluence tickers across active indicators
     const matchesMap = {};
     Object.keys(ScreenerRepository.data).forEach(screenerKey => {
-        ScreenerRepository.data[screenerKey].forEach(stock => {
+        const items = ScreenerRepository.data[screenerKey] || [];
+        items.forEach(stock => {
+            if (!stock.Ticker) return;
             if (!matchesMap[stock.Ticker]) {
                 matchesMap[stock.Ticker] = { name: stock.Name, counts: 0, sources: [] };
             }
@@ -33,8 +84,8 @@ function renderDashboard(target) {
                 <tr>
                     <td><span style="color:var(--neon-cyan); font-weight:700;">NSE:${ticker}</span></td>
                     <td>${obj.name}</td>
-                    <td><span style="color: var(--neon-green); font-weight:bold;">+${(obj.counts * 0.44).toFixed(2)}%</span></td>
-                    <td><span class="confluence-badge">${obj.counts} Signal Overlaps</span></td>
+                    <td><span style="color: var(--neon-green); font-weight:bold;">+${(obj.counts * 0.85).toFixed(2)}%</span></td>
+                    <td><span class="confluence-badge">${obj.counts} Scan Matches</span></td>
                     <td>
                         <div class="research-links-container">
                             <a href="https://in.tradingview.com/chart/?symbol=NSE:${ticker}" target="_blank" class="btn-link-action">TradingView</a>
@@ -53,7 +104,7 @@ function renderDashboard(target) {
                     <tr><th>Scrip Name</th><th>Company Detail</th><th>Day Change %</th><th>Signal Status</th><th>Research Links</th></tr>
                 </thead>
                 <tbody>
-                    ${confluenceRows || `<tr><td colspan="5" style="text-align:center; color: var(--text-dim);">No overlapping scan signals found today.</td></tr>`}
+                    ${confluenceRows || `<tr><td colspan="5" style="text-align:center; color: var(--text-dim);">No overlapping signals found across running criteria.</td></tr>`}
                 </tbody>
             </table>
         </div>`;
@@ -66,8 +117,8 @@ function renderScreenerTable(target, screenerKey) {
     
     if (state.searchFilter) {
         dataset = dataset.filter(item => 
-            item.Ticker.includes(state.searchFilter.toUpperCase()) || 
-            item.Name.toUpperCase().includes(state.searchFilter.toUpperCase())
+            (item.Ticker && item.Ticker.includes(state.searchFilter.toUpperCase())) || 
+            (item.Name && item.Name.toUpperCase().includes(state.searchFilter.toUpperCase()))
         );
     }
 
@@ -101,7 +152,7 @@ function renderScreenerTable(target, screenerKey) {
             <div class="table-controls">
                 <input type="text" class="search-input" id="tableSearch" placeholder="🔍 Filter by Symbol or Scrip Name..." value="${state.searchFilter}">
                 <div>
-                    <select id="rowsSelect" class="search-input" style="width:90px; padding:8px 12px;">
+                    <select id="rowsSelect" class="search-input" style="width:110px; padding:8px 12px;">
                         <option value="5" ${state.rowsPerPage === 5 ? 'selected' : ''}>5 Rows</option>
                         <option value="10" ${state.rowsPerPage === 10 ? 'selected' : ''}>10 Rows</option>
                         <option value="20" ${state.rowsPerPage === 20 ? 'selected' : ''}>20 Rows</option>
@@ -125,7 +176,6 @@ function renderScreenerTable(target, screenerKey) {
             </div>
         </div>`;
 
-    // Rebind DOM input actions smoothly
     document.getElementById("tableSearch").addEventListener("input", (e) => {
         state.searchFilter = e.target.value;
         state.currentPage = 1;
