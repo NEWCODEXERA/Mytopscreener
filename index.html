@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaQuant Stock Screener Hub</title>
+    <title>AlphaQuant Terminal Screener</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand">
-                <h2>📊 AlphaQuant</h2>
-                <p>Screener Hub v1.0</p>
+                <h2><span class="neon-dot"></span> DMAScreener</h2>
+                <p>Live Scanning Matrix</p>
             </div>
             <nav class="nav-menu" id="navMenu">
-                <!-- Navigation links injected dynamically by app.js -->
-            </nav>
+                </nav>
         </aside>
 
-        <!-- Main Workspace Area -->
         <main class="main-content">
             <header class="content-header">
-                <h1 id="currentPageTitle">Executive Dashboard</h1>
-                <p id="currentPageDesc">Synchronized Matrix Interface for system-wide technical scans.</p>
+                <div class="header-main-row">
+                    <h1 id="currentPageTitle">Executive Dashboard</h1>
+                    <div class="header-actions">
+                        <span class="status-indicator"><span class="pulse-dot"></span> Live Analysis</span>
+                        <button class="btn-refresh" onclick="window.location.reload();">Refresh Data</button>
+                    </div>
+                </div>
+                <p id="currentPageDesc" class="strategy-sub text-muted">Strategy Framework Interface</p>
             </header>
 
-            <!-- Dynamic Views Container -->
             <section class="view-panel" id="viewPanel">
-                <!-- Content layouts are drawn dynamically by app.js -->
-            </section>
+                </section>
         </main>
     </div>
     <script src="data.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
-
