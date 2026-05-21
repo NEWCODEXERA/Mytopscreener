@@ -1,329 +1,268 @@
 /* ==========================================================================
-   PRIMARY ACCENTS & VARIABLES (Premium Dark Theme Strategy)
+   INSTITUTIONAL QUANT TRADING SWATCHES
    ========================================================================== */
 :root {
-    --bg-base: #060913;
-    --bg-surface: rgba(16, 22, 40, 0.65);
-    --bg-surface-hover: rgba(30, 41, 71, 0.8);
-    --bg-sidebar: #0a0e1a;
+    --bg-dark: #07090e;
+    --bg-panel: #0d111b;
+    --border-glow: #161f30;
     
-    /* Institutional Color Swatches */
-    --color-primary: #3b82f6;       /* Bloomberg Electric Blue */
-    --color-success: #10b981;       /* Bullish Green */
-    --color-danger: #f43f5e;        /* Bearish Red */
+    /* Neon Accents from Screenshot Sample */
+    --neon-green: #00ff87;
+    --neon-cyan: #00f2fe;
+    --neon-yellow: #ffb300;
+    --neon-red: #ff3366;
     
-    /* Typography & Borders */
-    --text-main: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-premium: rgba(255, 255, 255, 0.06);
-    --border-active: rgba(59, 130, 246, 0.4);
-    --shadow-matrix: 0 4px 30px rgba(0, 0, 0, 0.4);
+    --text-bright: #ffffff;
+    --text-dim: #737c8c;
 }
 
-/* ==========================================================================
-   GLOBAL LAYOUT & RESET
-   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-    background-color: var(--bg-base);
+    background-color: var(--bg-dark);
+    /* Futuristic Blueprint Background Pattern */
     background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
-    color: var(--text-main);
+        linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: var(--text-bright);
     height: 100vh;
-    width: 100vw;
     overflow: hidden;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
-    width: 100vw;
 }
 
 /* ==========================================================================
-   SIDEBAR NAVIGATION PANEL SEGMENT
+   SIDEBAR & BRAND OVERHAUL
    ========================================================================== */
 .sidebar {
-    width: 280px;
-    background-color: var(--bg-sidebar);
-    border-right: 1px solid var(--border-premium);
+    width: 260px;
+    background-color: #090c12;
+    border-right: 1px solid var(--border-glow);
     display: flex;
     flex-direction: column;
     padding: 24px;
-    z-index: 10;
-}
-
-.brand {
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border-premium);
-    margin-bottom: 24px;
 }
 
 .brand h2 {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 800;
-    letter-spacing: 0.5px;
-    color: #ffffff;
+    letter-spacing: -0.5px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+}
+
+.neon-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-green);
 }
 
 .brand p {
-    color: var(--text-secondary);
-    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     margin-top: 6px;
 }
 
-/* Navigation Links Styling */
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
 .nav-item {
-    display: flex;
-    align-items: center;
     width: 100%;
-    padding: 12px 16px;
-    color: var(--text-secondary);
+    padding: 14px 16px;
+    color: var(--text-dim);
     background: transparent;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    text-decoration: none;
+    border: none;
+    border-radius: 6px;
     text-align: left;
     cursor: pointer;
     font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 
 .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-    color: var(--text-main);
-    transform: translateX(2px);
+    color: var(--text-bright);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .nav-item.active {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: #ffffff;
-    border-color: var(--border-active);
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
-    font-weight: 600;
+    color: var(--neon-green);
+    background: rgba(0, 255, 135, 0.05);
 }
 
 /* ==========================================================================
-   MAIN DASHBOARD WORKSPACE AREA
+   HEADER ACTIONS & PLATFORM STATUS
    ========================================================================== */
 .main-content {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
+    padding: 30px 40px;
     overflow-y: auto;
 }
 
-.content-header {
-    margin-bottom: 32px;
+.header-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.content-header h1 {
-    font-size: 2rem;
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-indicator {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--neon-green);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 255, 135, 0.08);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink { 50% { opacity: 0.3; } }
+
+.btn-refresh {
+    background: var(--neon-green);
+    color: #000000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
-.content-header p {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+.strategy-sub {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    margin-top: 4px;
 }
 
 /* ==========================================================================
-   SEGMENTED STAT CARDS GRID
+   SEGMENTED SCORE CARDS (Sample Clone)
    ========================================================================== */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 25px 0 35px 0;
 }
 
 .metric-card {
-    background: var(--bg-surface);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-premium);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: var(--shadow-matrix);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-glow);
+    border-radius: 8px;
+    padding: 18px 20px;
+    position: relative;
 }
 
-.metric-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.12);
+/* Segment Top-Highlight Accent Borders from image */
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 8px 8px 0 0;
 }
+.metric-card.scanned::before { background: var(--neon-cyan); }
+.metric-card.buy::before { background: var(--neon-green); }
+.metric-card.hold::before { background: var(--neon-yellow); }
+.metric-card.avoid::before { background: var(--neon-red); }
 
 .metric-card h3 {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+    font-size: 0.7rem;
+    color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .metric-card .value {
     font-size: 2.2rem;
     font-weight: 700;
     color: #ffffff;
-    margin: 12px 0 6px 0;
-    letter-spacing: -1px;
-}
-
-.metric-card .origin {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    background: rgba(59, 130, 246, 0.15);
-    color: #60a5fa;
-    border-radius: 4px;
-    text-transform: uppercase;
+    margin-top: 10px;
 }
 
 /* ==========================================================================
-   PREMIUM DATA PANELS AND TABLES SEGMENT
+   DATA TABLES & RESEARCH LINKS
    ========================================================================== */
 .table-wrapper {
-    background: var(--bg-surface);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-premium);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: var(--shadow-matrix);
-}
-
-.table-wrapper h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-/* Inputs, Selectors and Action Bars */
-.table-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    gap: 20px;
-}
-
-.search-input {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--border-premium);
-    color: var(--text-main);
-    padding: 12px 18px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-glow);
     border-radius: 8px;
-    width: 320px;
-    font-size: 0.9rem;
-    outline: none;
-    transition: all 0.2s ease;
+    padding: 24px;
 }
 
-.search-input:focus {
-    border-color: var(--color-primary);
-    background-color: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
-}
-
-/* Tabular Presentation */
 .data-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    text-align: left;
+    border-collapse: collapse;
 }
 
 .data-table th {
-    padding: 14px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary);
+    padding: 12px 16px;
+    color: var(--text-dim);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1a2336;
 }
 
 .data-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 0.95rem;
-    color: #e2e8f0;
-}
-
-.data-table tr:last-child td {
-    border-bottom: none;
+    padding: 16px 16px;
+    border-bottom: 1px solid #141a29;
+    font-size: 0.9rem;
 }
 
 .data-table tr:hover td {
-    background-color: rgba(255, 255, 255, 0.015);
-    color: #ffffff;
+    background: #111724;
 }
 
-/* ==========================================================================
-   DYNAMIC PAGINATION & STATUS INTERFACES
-   ========================================================================== */
-.pagination-container {
+/* External Link Badges */
+.research-links-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 8px;
 }
 
-.pagination-btn {
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border-premium);
-    color: var(--text-main);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.pagination-btn:hover:not(:disabled) {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-.pagination-btn:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
-}
-
-/* System Alerts / Feedback Badges */
-.confluence-badge {
-    background: rgba(16, 185, 129, 0.12);
-    color: var(--color-success);
+.btn-link-action {
     padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #60a5fa;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
     font-weight: 600;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.btn-link-action:hover {
+    background: rgba(59, 130, 246, 0.15);
+    color: #ffffff;
 }
